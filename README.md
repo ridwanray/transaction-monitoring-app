@@ -1,7 +1,7 @@
 # Real-time Transaction Monitoring App
 This system evaluate policies and  send notifications via email when certain conditions are met
 
-## Tools & Services:
+# Tools & Services:
 - Django & DRF : for building the APIs
 - Docker & Docker compose: Containerization
 - Celery: For running background task asynchronously(e.g. sending email)
@@ -9,7 +9,7 @@ This system evaluate policies and  send notifications via email when certain con
 - Flower dashboard: For monitoring celery background tasks
 - SQLite: Relational DB
 
-## Running locally
+# Running locally
 
 Create a .env file by copying the .env.sample provided and run:
 
@@ -28,7 +28,7 @@ http://localhost:8000/api/v1/doc
 <br><br><br>
 
 
-## Running In a Virtual Env
+# Running In a Virtual Env
 
 Create a virtual environment using:
 ```
@@ -52,13 +52,17 @@ Run the server using:
 python manage.py runserver
 ```
 
-Start celery worker process in an activated virtualenv at the app dir by running:
+Start celery worker process in an activated virtualenv at the 'app' directory by running:
+
 ```
 celery -A core worker --loglevel=info
 ```
 
+Remember to update RABBITMQ_URL in .env:
+Get a free instance at https://cloudamqp.com/
 
-## Run tests
+
+# Run tests
 Run descriptive tests in the container using:
 ```
 docker compose exec <docker_container_name> pytest
