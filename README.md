@@ -79,5 +79,5 @@ pytest -rP -vv
 # Worflow
 - Create account on the system
 - Login with valid credentials to retrieve auth token
-- Initiate transaction with amount & recipent
-- If policies are violated, transaction is flagged and email notication is triggered to sender
+- Initiate transaction with specified amount & recipent (This endpoint handles webhook integration)
+- If policies are violated, transaction is flagged and email notication is sent to sender
