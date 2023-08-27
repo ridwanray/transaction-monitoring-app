@@ -1,0 +1,5 @@
+-r base.txt
+pytest-django==4.5.2
+pytest-factoryboy==2.5.0
+pytest-mock==3.8.2
+time-machine== 2.8.2

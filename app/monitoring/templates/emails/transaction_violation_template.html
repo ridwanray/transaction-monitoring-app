@@ -1,0 +1,8 @@
+{% include "emails/layout/header.html" %}
+Hello {{user_name}},<br />
+
+Your recent transaction is flagged because of the following violations: <br/>
+
+{{message|safe }}
+
+{% include "emails/layout/footer.html" %}
