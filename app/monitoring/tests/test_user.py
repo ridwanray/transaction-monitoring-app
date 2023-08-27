@@ -24,7 +24,7 @@ class TestUser:
         assert user_instance.firstname == data["firstname"]
 
     def test_deny_create_user_duplicate_email(self, api_client, active_user):
-        """Deny create user; duplicate email"""
+        """Prevent user creation due to duplicate email."""
         data = {
             "email": active_user.email,
             "password": "simplepass@",
@@ -56,7 +56,7 @@ class TestUser:
         assert response.status_code == 200
         assert response.json()["total"] == 1
 
-    def test_retrieve_user_by_id(self, api_client, user_factory, authenticate_user):
+    def test_retrieve_user_by_id(self, api_client, authenticate_user):
         user = authenticate_user(is_admin=False)
         user_instance: User = user["user_instance"]
         token = user["token"]
@@ -66,3 +66,18 @@ class TestUser:
         assert response.status_code == 200
         assert response.json()["firstname"] == user_instance.firstname
         assert response.json()["tier"] == user_instance.tier
+
+    def test_update_user(self, api_client, authenticate_user):
+        user = authenticate_user(tier="T1", is_admin=False)
+        user_instance: User = user["user_instance"]
+        token = user["token"]
+        api_client_with_credentials(token, api_client)
+        url = reverse("user:user-detail", kwargs={"pk": user_instance.id})
+        data = {"is_flagged": False, "tier": "T2", "is_admin": True}
+        response = api_client.patch(url, data)
+        assert response.status_code == 200
+        user_instance.refresh_from_db()
+        assert response.json()["tier"] == data["tier"]
+        assert response.json()["is_flagged"] == data["is_flagged"]
+        assert user_instance.tier == data["tier"]
+        assert user_instance.is_admin == data["is_admin"]

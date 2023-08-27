@@ -80,4 +80,4 @@ pytest -rP -vv
 - Create account on the system
 - Login with valid credentials to retrieve auth token
 - Initiate transaction with amount & recipent
-- If policy is violated, transaction is flagged and email notication to sender
+- If policies are violated, transaction is flagged and email notication is triggered to sender
