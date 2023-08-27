@@ -33,7 +33,7 @@ class CustomObtainTokenPairSerializer(TokenObtainPairSerializer):
 
 
 class PasswordChangeSerializer(serializers.Serializer):
-    old_password = serializers.CharField(max_length=128, required=False)
+    old_password = serializers.CharField(max_length=128)
     new_password = serializers.CharField(max_length=128, min_length=4)
 
     def validate_old_password(self, value):
@@ -101,7 +101,7 @@ class OnboardUserSerializer(serializers.Serializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     sender_name = serializers.CharField(source="sender.firstname", read_only=True)
-    recipient_name = serializers.CharField(source="receiver.lastname", read_only=True)
+    recipient_name = serializers.CharField(source="receiver.firstname", read_only=True)
 
     class Meta:
         model = Transaction
@@ -123,7 +123,7 @@ class MakeTransactionSerializer(serializers.Serializer):
         auth_user: User = self.context["request"].user
         if auth_user == attrs["recipient"]:
             raise serializers.ValidationError(
-                {"recipient": "You cannot tranfer into your account"}
+                {"recipient": "You cannot tranfer into your account!"}
             )
         return super().validate(attrs)
 

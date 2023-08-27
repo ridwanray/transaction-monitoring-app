@@ -7,7 +7,7 @@ from django.template.defaultfilters import linebreaksbr
 from .enums import TIER_AMOUNT
 from .models import User
 
-MAX_TRANSACTION_AMOUNT = 5_000_000.00
+MAX_TRANSACTION_AMOUNT = 5_000_000.00 #5m
 
 
 def send_email(subject: str, email_to: str, html_alternative: Any):
