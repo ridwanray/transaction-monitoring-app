@@ -1,4 +1,5 @@
 # Real-time Transaction Monitoring App
+This system evaluate policies and  send notifications via email when certain conditions are met
 
 ## Tools & Services:
 - Django & DRF : for building the APIs

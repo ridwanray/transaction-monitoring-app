@@ -26,7 +26,7 @@ class CustomObtainTokenPairView(TokenObtainPairView):
 
 
 class PasswordChangeView(viewsets.GenericViewSet):
-    """Allows password change to authenticated user."""
+    """Enables authenticated users to change their passwords."""
 
     serializer_class = PasswordChangeSerializer
     permission_classes = [IsAuthenticated]
@@ -88,20 +88,21 @@ class UserViewsets(viewsets.ModelViewSet):
 
     @extend_schema(responses={200: UserSerializer()})
     def create(self, request, *args, **kwargs):
-        """Account is automatically activated when created."""
+        """Accounts are automatically activated upon creation."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"success": True, "message": "Account Created!"}, status=200)
 
     def list(self, request, *args, **kwargs):
-        """Retrieve user lists.\n
-        Only Admin retrieves all users on the system"""
+        """Retrieve a list of users.\n
+        Only admins can retrieve the complete list of users in the system.
+        """
         return super().list(request, *args, **kwargs)
 
     @extend_schema(responses={200: UserSerializer()})
     def partial_update(self, request, *args, **kwargs):
-        """Allow a user to update Tier and flag status"""
+        """Enables a user to update the tier, flag status, and admin status for a specified user."""
         return super().partial_update(request, *args, **kwargs)
 
 
@@ -115,6 +116,7 @@ class TransactionViewSets(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
+    filterset_fields = ["is_flagged"]
     search_fields = ["sender__firstname", "receiver__firstname", "amount"]
     ordering_fields = [
         "created_at",
@@ -127,15 +129,16 @@ class TransactionViewSets(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user: User = self.request.user
-        return Transaction.objects.filter(Q(sender=user) | Q(receiver=user))
+        return Transaction.objects.filter(Q(sender=user) | Q(receiver=user)).distinct()
 
     def list(self, request, *args, **kwargs):
-        """Retrieve transactions associated with an authenticated user"""
+        """Retrieve transactions associated with an authenticated user."""
         return super().list(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
-        """Make a transfer from an authenticated user to another user
-        Transaction is restricted between the same account."""
+        """Initiate a transfer from an authenticated user to another user.\n
+        Transactions are restricted to occur between the same accounts.
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
